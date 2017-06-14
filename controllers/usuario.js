@@ -163,8 +163,31 @@ function check_login (params, res){
 	return true;
 }
 
+function actualizar (req, res){
+
+	var id_user = req.params.id;
+	var update = req.body;
+
+	Usuario.findByIdAndUpdate(id_user, update, (err, userUpdated) => {
+		if (err){
+			return res.status(500).send({message:'Error al actulizar el usuario.'});
+		}
+		else{
+			if (!userUpdated){
+				return res.status(404).send({message:'No se pudo actualizar el usuario.'});
+			}
+			else{
+				return res.status(200).send({usuario: userUpdated});
+			}
+		}
+	});
+
+}
+
+
 module.exports = {
 	registrar,
 	login,
+	actualizar,
 	pruebas
 };
