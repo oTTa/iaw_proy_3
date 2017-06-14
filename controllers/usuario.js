@@ -6,6 +6,14 @@ var bcrypt = require('bcrypt-nodejs');
 var validator = require('validator');
 var trim = require('trim');
 
+
+function pruebas (req, res){
+	res.status('200').send({
+		message: 'metodo para pruebas' 
+	});
+
+}
+
 function registrar(req, res){
 
 	var usuario = new Usuario();
@@ -157,5 +165,6 @@ function check_login (params, res){
 
 module.exports = {
 	registrar,
-	login
+	login,
+	pruebas
 };
