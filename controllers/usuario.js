@@ -19,7 +19,6 @@ function registrar(req, res){
 	var usuario = new Usuario();
 
 	var params = req.body;
-	//console.log(params);
 	
 	if (checkData(params,res)){
 
@@ -168,7 +167,9 @@ function actualizar (req, res){
 	var id_user = req.params.id;
 	var update = req.body;
 
-	Usuario.findByIdAndUpdate(id_user, update, (err, userUpdated) => {
+	check_data_update(update);
+
+	Usuario.findByIdAndUpdate(id_user, update,  {new: true}, (err, userUpdated) => {
 		if (err){
 			return res.status(500).send({message:'Error al actulizar el usuario.'});
 		}
@@ -184,10 +185,56 @@ function actualizar (req, res){
 
 }
 
+function check_data_update (data){
+	if (typeof data.nombre !== 'undefined'){
+		data.nombre = trim(data.nombre.toLowerCase());
+	}
+	if (typeof data.apellido !== 'undefined'){
+		data.apellido = trim(data.apellido.toLowerCase());
+	}
+	if (typeof data.mail !== 'undefined'){
+		if (!validator.isEmail(usuario.email))
+		{
+			res.status('400').send({
+				message : 'El formato del email es invalido.'
+			});
+			return false;
+		}
+		data.mail = trim(mail);
+	}
+	return true;
+}
+
+function get_usuario (req, res){
+	var email = req.params.email;
+
+	Usuario.findOne({email: email}, (err, user) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!user){
+				res.status('404').send({
+					message : 'No existe el usuario.'
+				});
+			}
+			else{
+				res.status('200').send({
+					usuario: user
+				});
+			}
+		}
+	});
+
+}
+
 
 module.exports = {
 	registrar,
 	login,
 	actualizar,
+	get_usuario,
 	pruebas
 };
