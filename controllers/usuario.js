@@ -230,11 +230,25 @@ function get_usuario (req, res){
 
 }
 
+function subir_imagen (req, res){
+	var userID = req.params.id;
+	var file_name = null;
+	if (req.files){
+		var file_path = req.files.image.path;
+		var file_split = file_path.split('\\');
+		file_name = file_split[2];
+		console.log(file_path);
+		console.log(file_name);
+	}else{
+		res.status(200).send({message: 'La imagen no se subio.'})
+	}
+}
 
 module.exports = {
 	registrar,
 	login,
 	actualizar,
 	get_usuario,
+	subir_imagen,
 	pruebas
 };
