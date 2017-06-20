@@ -231,14 +231,34 @@ function get_usuario (req, res){
 }
 
 function subir_imagen (req, res){
-	var userID = req.params.id;
+	var user_id = req.params.id;
 	var file_name = null;
 	if (req.files){
 		var file_path = req.files.image.path;
 		var file_split = file_path.split('\\');
 		file_name = file_split[2];
-		console.log(file_path);
-		console.log(file_name);
+		var extension = file_name.split('\.')[1];
+		if (extension=='jpg' || extension=='jpeg' || extension=='png'){
+			Usuario.findByIdAndUpdate(user_id, {imagen: file_name},{new: true}, (err, userUpdated) => {
+				
+				if (err){
+					return res.status(500).send({message:'Error al actulizar el usuario.'});
+				}
+				else{
+					if (!userUpdated){
+						return res.status(404).send({message:'No se pudo actualizar el usuario.'});
+					}
+					else{
+						return res.status(200).send({usuario: userUpdated});
+					}
+				}
+
+			});
+		}
+		else
+		{
+			res.status(400).send({message: 'Formato invalido.'})
+		}
 	}else{
 		res.status(200).send({message: 'La imagen no se subio.'})
 	}
