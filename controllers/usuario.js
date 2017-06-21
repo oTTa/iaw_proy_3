@@ -1,18 +1,13 @@
 'use strict'
 
-var Usuario = require('../models/usuario');
-var jwt = require('../services/jwt');
-var bcrypt = require('bcrypt-nodejs');
-var validator = require('validator');
-var trim = require('trim');
-
-
-function pruebas (req, res){
-	res.status('200').send({
-		message: 'metodo para pruebas' 
-	});
-
-}
+const Usuario = require('../models/usuario');
+const jwt = require('../services/jwt');
+const bcrypt = require('bcrypt-nodejs');
+const validator = require('validator');
+const trim = require('trim');
+const fs = require('fs');
+const path = require('path');
+const dir_image = "./uploads/users/";
 
 function registrar(req, res){
 
@@ -46,8 +41,7 @@ function registrar(req, res){
 							}
 							else{
 								res.status('500').send({
-									message : 'Error al guardar el usuario en la BD.',
-									usuario : usuario_store
+									message : 'Error al guardar el usuario en la BD.'
 								});
 							}
 						}
@@ -238,9 +232,8 @@ function subir_imagen (req, res){
 		var file_split = file_path.split('\\');
 		file_name = file_split[2];
 		var extension = file_name.split('\.')[1];
-		if (extension=='jpg' || extension=='jpeg' || extension=='png'){
+		if (extension=='jpg' || extension=='jpeg'){
 			Usuario.findByIdAndUpdate(user_id, {imagen: file_name},{new: true}, (err, userUpdated) => {
-				
 				if (err){
 					return res.status(500).send({message:'Error al actulizar el usuario.'});
 				}
@@ -252,16 +245,56 @@ function subir_imagen (req, res){
 						return res.status(200).send({usuario: userUpdated});
 					}
 				}
-
 			});
 		}
 		else
 		{
+			fs.unlinkSync(file_path);
 			res.status(400).send({message: 'Formato invalido.'})
 		}
 	}else{
 		res.status(200).send({message: 'La imagen no se subio.'})
 	}
+}
+
+function get_imagen (req, res){
+	var image_file;
+	Usuario.findOne({_id: req.params.id}, (err, user) => {
+		if (err){
+			return res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!user){
+				return res.status('404').send({
+					message : 'No existe el usuario.'
+				});
+			}
+			else{
+				if (typeof user.imagen === 'undefined'){
+					return res.status('404').send({
+						message : 'El usuario no tiene foto de perfil.'
+					});
+				}
+				else{
+					var path_file = dir_image+user.imagen;
+					fs.exists(path_file, function (exists){
+						if (exists){
+							return res.sendFile(path.resolve(path_file));
+						}
+						else{
+							return res.status(400).send({message: 'La imagen no existe.'})
+						}
+					});
+				}
+			}
+		}
+	});
+	
+
+	
+
 }
 
 module.exports = {
@@ -270,5 +303,5 @@ module.exports = {
 	actualizar,
 	get_usuario,
 	subir_imagen,
-	pruebas
+	get_imagen
 };

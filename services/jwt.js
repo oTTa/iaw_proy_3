@@ -13,7 +13,7 @@ exports.crear_token = function(user){
 		role: user.role,
 		imagen: user.imagen,
 		iat: moment().unix(),
-		exp: moment().add(12, 'hours').unix
+		exp: moment().add(12, 'hours').unix()
 	};
 	return jwt.encode(payload, secret);
 };
