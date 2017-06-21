@@ -132,13 +132,10 @@ function get(req, res){
 function listar(req, res){
 	var pag = req.params.page;
 
-	if (req.params.page==null || validator.isEmpty(req.params.page.toString()))
+	if (pag<1)
 	{
-		pag=1;
+		return res.status(400).send({message : "la pagina debe ser mayor a 0"});
 	}
-
-	console.log('hola');
-	console.log(pag);
 
 	var items_por_pag = 3;
 
@@ -152,8 +149,24 @@ function listar(req, res){
 				return res.status(404).send({message: 'No hay destinos'})
 			}
 			else{
+				var sig, ant;
+
+				if (pag == Math.ceil(total/items_por_pag))
+					sig=null;
+				else
+					sig=parseInt(pag)+1;
+
+				if (pag==1)
+					ant=null;
+				else
+					ant=parseInt(pag)-1;
 				return res.status(200).send({
-					pages: total,
+					header: {
+						paginas: Math.ceil(total/items_por_pag),
+						total: total,
+						siguiente: sig,
+						anterior: ant
+					},					
 					destinos: destinos
 				});
 			}
