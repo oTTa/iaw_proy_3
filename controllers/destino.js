@@ -106,6 +106,62 @@ function checkData(destino, res){
 
 }
 
+function editar(req, res){
+	var id_destino = req.params.id;
+	var update = req.body;
+
+	check_data_update (update);
+
+	Destino.findByIdAndUpdate(id_destino, update,  {new: true}, (err, destino_updated) => {
+		if (err){
+			return res.status(500).send({message:'Error al actulizar el destino.'});
+		}
+		else{
+			if (!destino_updated){
+				return res.status(404).send({message:'No se pudo actualizar el destino.'});
+			}
+			else{
+				return res.status(200).send({usuario: destino_updated});
+			}
+		}
+	});
+
+}
+
+function check_data_update (data){
+	if (typeof data.nombre !== 'undefined'){
+		data.nombre = trim(data.nombre.toLowerCase());
+	}
+	if (typeof data.provincia !== 'undefined'){
+		data.provincia = trim(data.provincia.toLowerCase());
+	}
+	if (typeof data.pais !== 'undefined'){
+		data.pais = trim(data.pais.toLowerCase());
+	}
+
+	if (typeof data.latitud !== 'undefined'){
+		if (!validator.isDecimal(data.latitud.toString()))
+		{
+			res.status('400').send({
+				message : 'La longitud debe ser decimal.'
+			});
+			return false;
+		}
+	}
+
+	if (typeof data.longitud !== 'undefined'){
+		if (!validator.isDecimal(data.longitud.toString()))
+		{
+			res.status('400').send({
+				message : 'La longitud debe ser decimal.'
+			});
+			return false;
+		}
+	}
+
+	return true;
+}
+
 function get(req, res){
 
 	Destino.findOne({_id: req.params.id}, (err, destino) => {
@@ -177,5 +233,6 @@ function listar(req, res){
 module.exports = {
 	crear,
 	get,
+	editar, 
 	listar
 };
