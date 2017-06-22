@@ -9,7 +9,7 @@ exports.autenticar_usuario = function (req, res, next){
 		return res.status(403).send({
 			message: 'Falta la cabecera de autenticación'});
 	}
-
+	//por si el token es mandado entre comillas ""
 	var token = req.headers.authorization.replace(/["']+/g, '');
 
 	try {

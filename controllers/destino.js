@@ -164,7 +164,7 @@ function check_data_update (data){
 
 function get(req, res){
 
-	Destino.findOne({_id: req.params.id}, (err, destino) => {
+	Destino.findById({_id: req.params.id}, (err, destino) => {
 		if (err){
 			res.status('500').send({
 				message : 'Error en la petición.'
@@ -186,14 +186,18 @@ function get(req, res){
 }
 
 function listar(req, res){
-	var pag = req.params.page;
-
+	var pag
+	if (req.query.page)
+		pag = req.query.page;
+	else
+		pag = 1;
+	
 	if (pag<1)
 	{
 		return res.status(400).send({message : "la pagina debe ser mayor a 0"});
 	}
 
-	var items_por_pag = 3;
+	var items_por_pag = 2;
 
 	Destino.find().paginate(pag, items_por_pag, function(err, destinos, total){
 		if (err){

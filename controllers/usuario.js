@@ -7,7 +7,7 @@ const validator = require('validator');
 const trim = require('trim');
 const fs = require('fs');
 const path = require('path');
-const dir_image = "./uploads/users/";
+const dir_image = "./imagenes/usuarios";
 
 function registrar(req, res){
 
