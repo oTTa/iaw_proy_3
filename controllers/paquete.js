@@ -215,7 +215,9 @@ function editar(req, res){
 
 	check_data_update (update);
 
-	Paquete.findByIdAndUpdate(id_paquete, update,  {new: true}, (err, destino_updated) => {
+	Paquete.findByIdAndUpdate(id_paquete, update,  {new: true})
+	.populate('destino')
+	.exec( function(err, destino_updated){
 		if (err){
 			return res.status(500).send({message:'Error al actulizar el destino.'});
 		}
