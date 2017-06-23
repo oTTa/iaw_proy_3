@@ -173,7 +173,7 @@ function listar(req, res){
 
 	var items_por_pag = 20;
 
-	Paquete.find().paginate(pag, items_por_pag, function(err, paquetes, total){
+	Paquete.find().populate('destino').paginate(pag, items_por_pag, function(err, paquetes, total){
 		if (err){
 			return res.status(500).send({message : "error en la petición listar"});
 		}
@@ -209,8 +209,92 @@ function listar(req, res){
 
 }
 
+function editar(req, res){
+	var id_paquete = req.params.id;
+	var update = req.body;
+
+	check_data_update (update);
+
+	Paquete.findByIdAndUpdate(id_paquete, update,  {new: true}, (err, destino_updated) => {
+		if (err){
+			return res.status(500).send({message:'Error al actulizar el destino.'});
+		}
+		else{
+			if (!destino_updated){
+				return res.status(404).send({message:'No se pudo actualizar el destino.'});
+			}
+			else{
+				return res.status(200).send({usuario: destino_updated});
+			}
+		}
+	});
+
+}
+
+function check_data_update (data){
+	if (typeof data.fecha_salida !== 'undefined'){
+		if (!validator.isISO8601(data.fecha_salida))
+		{
+			res.status('400').send({
+				message : 'Formato invalido de la fecha de salida, debe ser de la forma yyyy/mm/dd.'
+			});
+			return false;
+		}
+	}
+
+	if (typeof data.fecha_regreso !== 'undefined'){
+		if (!validator.isISO8601(data.fecha_regreso))
+		{
+			res.status('400').send({
+				message : 'Formato invalido de la fecha de regreso, debe ser de la forma yyyy/mm/dd.'
+			});
+			return false;
+		}
+	}
+
+	if (typeof data.fecha_regreso !== 'undefined'){
+		if (!validator.isISO8601(data.fecha_regreso))
+		{
+			res.status('400').send({
+				message : 'Formato invalido de la fecha de regreso, debe ser de la forma yyyy/mm/dd.'
+			});
+			return false;
+		}
+	}
+
+	if (typeof data.costo !== 'undefined'){
+		if (!validator.isInt(data.costo.toString()))
+		{
+			res.status('400').send({
+				message : 'El costo debe ser un entero.'
+			});
+			return false;
+		}
+	}
+
+	if (data.destino==null || validator.isEmpty(data.destino))
+	{
+		res.status('400').send({
+			message : 'Debes ingresar un destino.'
+		});
+		return false;
+	}
+
+	if (typeof data.url_video !== 'undefined'){
+		if (!validator.isURL(data.url_video))
+			{
+				res.status('400').send({
+					message : 'La URL no tiene el formato corrrecto.'
+				});
+				return false;
+			}
+	}
+	return true;
+}
+
 module.exports = {
 	crear,
+	editar,
 	get,
 	listar
 };
