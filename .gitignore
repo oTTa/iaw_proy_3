@@ -58,4 +58,5 @@ typings/
 .env
 
 #archivos subido por el usuario
-uploads/users/*
+imagenes/usuarios/*
+imagenes/paquetes/*

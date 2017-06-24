@@ -5,8 +5,8 @@ var schema = mongoose.Schema;
 var SchemaTypes = mongoose.Schema.Types;
 
 var imagen_paquete_schema = schema({
-	url: String,
-	url_thumbnail: String,
+	imagen: String,
+	imagen_thumbnail: String,
 	paquete: {type: schema.ObjectId, ref:'paquete'}
 });
 

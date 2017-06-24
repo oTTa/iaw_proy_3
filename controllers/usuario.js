@@ -232,7 +232,7 @@ function subir_imagen (req, res){
 		var file_split = file_path.split('\\');
 		file_name = file_split[2];
 		var extension = file_name.split('\.')[1];
-		if (extension=='jpg' || extension=='jpeg'){
+		if (extension=='jpg' || extension=='jpeg' || extension=='png'){
 			Usuario.findByIdAndUpdate(user_id, {imagen: file_name},{new: true}, (err, userUpdated) => {
 				if (err){
 					return res.status(500).send({message:'Error al actulizar el usuario.'});
@@ -259,7 +259,7 @@ function subir_imagen (req, res){
 
 function get_imagen (req, res){
 	var image_file;
-	Usuario.findOne({_id: req.params.id}, (err, user) => {
+	Usuario.findById(req.params.id, (err, user) => {
 		if (err){
 			return res.status('500').send({
 				message : 'Error en la petición.'

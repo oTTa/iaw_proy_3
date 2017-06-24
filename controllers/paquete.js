@@ -1,12 +1,15 @@
 'use strict'
 
 const Paquete = require('../models/paquete');
+const Destino = require('../models/destino');
+const Imagen_paquete = require('../models/imagen_paquete');
 const validator = require('validator');
 const trim = require('trim');
 const paginate = require('mongoose-pagination');
 const fs = require('fs');
 const path = require('path');
-const dir_image = "./imagenes/paquetes";
+const dir_image = "./imagenes/paquetes/";
+var thumb = require('node-thumbnail').thumb;
 
 function crear(req, res){
 
@@ -15,6 +18,7 @@ function crear(req, res){
 	var params = req.body;
 	
 	if (checkData(params,res)){
+
 
 		if (typeof params.url_video !== 'undefined'){
 			paquete.url_video = trim(params.url_video);
@@ -115,6 +119,23 @@ function checkData(paquete, res){
 		return false;
 	}
 
+	Destino.findById(paquete.destino, (err, dest) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			console.log(paquete.destino);
+			console.log(dest);
+			if (!dest){
+				res.status('404').send({
+					message : 'No existe el destino.'
+				});
+			}
+		}
+	});
+
 	/*if (!validator.isMongoId('paquete.destino'))
 	{
 		res.status('400').send({
@@ -156,6 +177,75 @@ function get(req, res){
 				});
 			}
 		}
+	});
+}
+
+function get_imagenes(req, res){
+		Imagen_paquete.find({paquete: req.params.id}).exec( (err, imagenes) => {
+					if (err){
+						res.status('500').send({
+							message : 'Error en la petición imagenes.'
+						});
+					}
+					else{
+						if (imagenes){
+							console.log(imagenes);
+							return res.status('200').send({
+								imagenes
+							});
+
+						}
+					}
+	});
+}
+
+function get_imagen(req, res){
+		Imagen_paquete.findById(req.params.id_imagen).exec( (err, imagen) => {
+					if (err){
+						res.status('500').send({
+							message : 'Error en la petición imagenes.'
+						});
+					}
+					else{
+						if (imagen){
+								var path_file = dir_image+imagen.imagen;
+								console.log(dir_image+imagen.imagen);
+								fs.exists(path_file, function (exists){
+									if (exists){
+										return res.sendFile(path.resolve(path_file));
+									}
+									else{
+										return res.status(400).send({message: 'La imagen no existe.'})
+									}
+								});
+						}
+
+					}
+	});
+}
+
+
+function get_imagen_thumb(req, res){
+		Imagen_paquete.findById(req.params.id_imagen).exec( (err, imagen) => {
+					if (err){
+						res.status('500').send({
+							message : 'Error en la petición imagenes.'
+						});
+					}
+					else{
+						if (imagen){
+								var path_file = dir_image+"thumb/"+imagen.imagen_thumbnail;
+								fs.exists(path_file, function (exists){
+									if (exists){
+										return res.sendFile(path.resolve(path_file));
+									}
+									else{
+										return res.status(400).send({message: 'La imagen no existe.'})
+									}
+								});
+						}
+
+					}
 	});
 }
 
@@ -294,9 +384,91 @@ function check_data_update (data){
 	return true;
 }
 
+function subir_imagen (req, res){
+	var id_paquete = req.params.id;
+
+	Paquete.findById(id_paquete, (err, paq) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!paq){
+				res.status('404').send({
+					message : 'No existe el paquete.'
+				});
+			}
+		}
+	});
+
+	var file_name = null;
+	if (req.files){
+		var file_path = req.files.image.path;
+		var file_split = file_path.split('\\');
+		file_name = file_split[2];
+		var extension = file_name.split('\.')[1];
+		var name = file_name.split('\.')[0];
+		if (extension=='jpg' || extension=='jpeg' || extension=='png'){
+
+			var imagen_paquete = new Imagen_paquete();
+			imagen_paquete.imagen = file_name;
+
+
+			thumb({
+			  source: file_path, 
+			  destination: dir_image+"thumb/",
+			  width: 350,
+
+			}).then(function() {
+			  //console.log('Success');
+			}).catch(function(e) {
+			  console.log('Error', e.toString());
+			});
+
+			
+
+			imagen_paquete.imagen_thumbnail = name + '_thumb.' + extension;
+			imagen_paquete.paquete = id_paquete;
+
+			imagen_paquete.save((err,imagen_paquete_store) =>{
+				if (err){
+					res.status('500').send({
+						message : 'Error al actualizar el paquete.'
+					});
+				}
+				else{
+					if (imagen_paquete_store){
+						res.status('201').send({
+							imagen_paquete : imagen_paquete_store
+						});
+					}
+					else{
+						res.status('500').send({
+							message : 'No se pudo actualizar el paquete.',
+						});
+					}
+				}
+			});	
+
+		}
+		else
+		{
+			fs.unlinkSync(file_path);
+			res.status(400).send({message: 'Formato invalido.'})
+		}
+	}else{
+		res.status(200).send({message: 'La imagen no se subio.'})
+	}
+}
+
 module.exports = {
 	crear,
 	editar,
 	get,
-	listar
+	listar,
+	subir_imagen,
+	get_imagenes,
+	get_imagen,
+	get_imagen_thumb
 };
