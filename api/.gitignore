@@ -57,7 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
-#archivos subido por el usuario
+#archivos subido por el usuario y el admin
 imagenes/usuarios/*
 imagenes/paquetes/*
 imagenes/paquetes/thumb/*

@@ -17,6 +17,16 @@ app.use(body_parser.json());
 
 //configurar cabeceras http
 
+app.use((req, res, next) =>{
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', '*');
+	res.header('Access-Control-Allow-Method', 'GET, POST, OPTIONS, PUT, DELETE');
+	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+
+	next();
+
+});
+
 //rutas base
 app.use('/api', usuarios_routes);
 app.use('/api', destinos_routes);
