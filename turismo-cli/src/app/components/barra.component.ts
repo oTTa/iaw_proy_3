@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../services/usuario.service';
 import  {GLOBAL} from '../services/global';
 import { Usuario } from '../models/usuario';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -23,6 +24,8 @@ export class BarraComponent implements OnInit{
 
   constructor (
     private _usuarioService: UsuarioService,
+   private route: ActivatedRoute,
+   private router: Router,
   ){
     this.usuario = new Usuario('','','','','ROLE_USER','','');
     this.url = GLOBAL.url;
@@ -33,7 +36,7 @@ export class BarraComponent implements OnInit{
       this.token = this._usuarioService.get_token();
   }
 
-  public login(){
+  login(){
     this._usuarioService.signup(this.usuario).subscribe(
       response => {
         let identity = response.usuario;
@@ -62,12 +65,13 @@ export class BarraComponent implements OnInit{
     );
   }
 
-  public logout (){
+  logout (){
     localStorage.removeItem('identity');
     localStorage.removeItem('token');
     localStorage.clear();
     this.identity = null;
     this.token = null;
+    this.router.navigateByUrl('/');
   }
 
 }

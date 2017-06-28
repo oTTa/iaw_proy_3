@@ -45,6 +45,7 @@ export class UsuarioService {
 		.map(res => res.json());
 	}
 
+
 	get_identity(){
 		let identity = JSON.parse(localStorage.getItem('identity'));
 		if (identity != "undefined"){

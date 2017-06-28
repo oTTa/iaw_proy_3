@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { BarraComponent } from './components/barra.component';
 import { RegistrarComponent } from './components/usuario-registrar.component';
 import { PerfilComponent } from './components/perfil.component';
+import { InicioComponent } from './components/inicio.component';
 
 
 
@@ -17,7 +18,8 @@ import { PerfilComponent } from './components/perfil.component';
     AppComponent,
     BarraComponent,
     RegistrarComponent,
-    PerfilComponent
+    PerfilComponent,
+    InicioComponent
   ],
   imports: [
     BrowserModule,
