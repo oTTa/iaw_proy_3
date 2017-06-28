@@ -1,0 +1,130 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          <img style="max-width:110px; margin-top: -12px;" src="assets/images/turismo_thumb.png">
+        </a>
+        
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+
+<!-- is admin -->
+        <ul *ngIf="identity" class="nav navbar-nav">
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Destino <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="">Crear</a></li>
+            </ul>
+          </li>
+
+        </ul>
+<!-- fin is admin -->
+
+       
+
+        <ul class="nav navbar-nav navbar-right">
+
+          <!-- si esta logueado -->
+
+            <li *ngIf="identity" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Perfil
+              <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+          
+                <li>
+                  <div class="navbar-content">
+                    <div class="row">
+                      <div *ngIf="identity.imagen" class="col-md-5">
+                        <img id="id_profile" src="{{url}}usuarios/{{identity._id}}/imagen_perfil" 
+                        class="img-responsive" />
+                      </div>
+                      <div class="col-md-7">
+                        <span id="id_nombre">{{identity.nombre}} {{identity.apellido}}</span>
+                        <p id="id_mail" class="text-muted small">
+                        {{identity.email}}
+                        </p>
+                        <div class="divider">
+                        </div>
+                        <div style="text-align: center;">
+                          <a href="/perfil" style="margin-bottom: 5px" class="btn btn-primary btn-sm"><i class="fa fa-user" aria-hidden="true"></i> Ver perfil</a>
+                          <button style="margin-bottom: 5px" (click)="logout()" class="btn btn-default btn-sm"><i class="fa fa-sign-out" aria-hidden="true"></i> Cerrar sesión</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+           <!-- fin si esta logueado -->
+
+            <li *ngIf="!identity" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Login
+              <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+          
+                <li>
+                  <div class="navbar-content">
+                    <div class="row">
+                      <div class="panel-body">
+
+          <form #loginForm="ngForm" (ngSubmit)="login()" class="form-horizontal" role="form">
+
+                  <p *ngIf="error_general" style="color: red">
+                    {{error_general}}
+                  </p>
+
+                  <div class="form-group control-group">
+                    <label for="email" class="col-md-3 control-label">
+                      Em@il</label>
+                      <div class="col-md-9 controls">
+                        <input type="email" class="form-control" name="email" placeholder="Email" #email="ngModel" [(ngModel)]="usuario.email" 
+                        required>
+                        <span style="color: red" *ngIf="!email.valid && email.touched">
+                        Ingrese el email
+                      </span>
+                      </div>
+           
+                  </div>
+
+                    <div class="form-group control-group">
+                      <label for="contraseña" class="col-md-3 control-label">
+                        Contraseña</label>
+                        <div class="col-md-9 controls">
+                          <input type="password" class="form-control" name="password" placeholder="Contraseña" #password="ngModel" [(ngModel)]="usuario.password"
+                          required>
+                          <span style="color: red" *ngIf="!password.valid && password.touched">
+                            Ingrese una contraseña
+                          </span>
+                        </div>
+                    </div>
+
+                      <div class="form-group last">
+                        <div class="col-md-12">
+                          <input type="submit" class="btn btn-success btn-block" value="Login">
+                          <p style="text-align: center; margin-top: 7px">No tienes una cuenta, <a href="/registrarse">Registrate</a></p>
+                          
+                        </div>
+                      </div>
+
+
+
+                      </form>
+                    </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </nav>

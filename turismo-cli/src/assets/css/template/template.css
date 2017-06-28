@@ -1,0 +1,18 @@
+#main_container{
+	margin-top: 70px;
+	background-color: white;
+	border-radius: 10px;
+}
+
+#main_container_transparente{
+	margin-top: 70px;
+}
+
+#titulo{
+	text-align: center;
+}
+
+.center-image{
+	display: block;
+    margin: 0 auto;
+}

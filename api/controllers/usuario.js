@@ -56,6 +56,53 @@ function registrar(req, res){
 	}
 }
 
+function crear_admin(req, res){
+
+	var usuario = new Usuario();
+
+	var params = req.body;
+	
+	if (checkData(params,res)){
+
+		usuario.nombre = trim(params.nombre.toLowerCase());
+		usuario.apellido = trim(params.apellido.toLowerCase());
+		usuario.email = trim(params.email);
+		usuario.role = 'ROLE_ADMIN';
+		usuario.image = null;
+
+		if (params.password){
+			bcrypt.hash(params.password,null,null, function(err,hash){
+				usuario.password = hash;
+				usuario.save((err,usuario_store) =>{
+						if (err){
+							res.status('409').send({
+								message : 'Ya existe un usuario con ese email.'
+							});
+						}
+						else{
+							if (usuario_store){
+								res.status('201').send({
+									message : 'Usuario guardado correctamente',
+									usuario : usuario_store
+								});
+							}
+							else{
+								res.status('500').send({
+									message : 'Error al guardar el usuario en la BD.'
+								});
+							}
+						}
+				});				
+			});
+		}
+		else{
+			res.status('400').send({
+				message : 'Debes ingresar una contraseña.'
+			});
+		}
+	}
+}
+
 function checkData(usuario, res){
 
 	if (usuario.nombre==null || validator.isEmpty(usuario.nombre))
@@ -112,10 +159,12 @@ function login (req, res){
 				}
 				else{
 					bcrypt.compare(password,user.password, function (err, check){
+						user.password=undefined;
 						if (check){
-								res.status('200').send({
-									token: jwt.crear_token(user)
-								});
+							res.status('200').send({
+								token: jwt.crear_token(user),
+								usuario: user
+							});
 						}
 						else{
 							res.status('401').send({
@@ -278,7 +327,7 @@ function get_imagen (req, res){
 					});
 				}
 				else{
-					var path_file = dir_image+user.imagen;
+					var path_file = dir_image+'/'+user.imagen;
 					fs.exists(path_file, function (exists){
 						if (exists){
 							return res.sendFile(path.resolve(path_file));
@@ -303,5 +352,6 @@ module.exports = {
 	actualizar,
 	get_usuario,
 	subir_imagen,
-	get_imagen
+	get_imagen,
+	crear_admin
 };

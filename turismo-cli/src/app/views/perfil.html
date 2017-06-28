@@ -1,0 +1,120 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">Perfil</div>
+		<div class="panel-body">
+			<div class="list-group">
+
+					<div  class="list-group-item">
+						<h2 class="list-group-item-heading" style="text-align: center;">{{identity.nombre}} {{identity.apellido}}</h2>
+						<div class="list-group-item-text" style="text-align: center;">
+								<img *ngIf="identity.imagen" src="{{url}}usuarios/{{identity._id}}/imagen_perfil" class="img-responsive center-image" style="max-height: 350px;">
+								<br>
+								<p><strong>Email:</strong> {{identity.email}}</p>	
+						</div>
+						<div id="cambiar_datos">
+
+							<div class="col-md-5">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<i class="fa fa-user" aria-hidden="true"></i> Cambiar Datos
+									</div>
+									<div class="panel-body">
+
+										<div *ngIf="modificado" class="alert alert-success">
+											<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+											<strong>Registrado!</strong> Te registraste de manera exitosa.
+										</div>
+
+										<form #modificarUserForm="ngForm" (ngSubmit)="modificar()" class="form-horizontal" role="form">
+
+											<p *ngIf="error_general" style="color: red">
+												{{error_general}}
+											</p>
+
+											<div class="form-group control-group">
+												<label for="nombre" class="col-md-3 control-label">
+													Nombre</label>
+													<div class="col-md-9 controls">
+														<input #nombre="ngModel" [(ngModel)]="usuario_modificar.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre"
+														required>
+														<span style="color: red" *ngIf="!nombre.valid && nombre.touched">
+															El nombre es obligatorio
+														</span>
+													</div>
+												</div>
+
+												<div class="form-group control-group">
+													<label for="apellido" class="col-md-3 control-label">
+														Apellido</label>
+														<div class="col-md-9 controls">
+															<input #apellido="ngModel" [(ngModel)]="usuario_modificar.apellido" name="apellido" type="text" class="form-control" placeholder="Apellido" 
+															required>
+															<span style="color: red" *ngIf="!apellido.valid && apellido.touched">
+																El apellido es obligatorio
+															</span>
+														</div>
+													</div>
+
+															<div class="form-group last">
+																<div class="col-md-12">
+																	<input type="submit" name="registrar" value="Modificar" class="btn btn-success btn-block">
+																	<div id="spinner" style="display: none">
+																		<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+																		<span class="sr-only">Loading...</span>
+																	</div>
+																</div>
+															</div>
+
+
+
+														</form>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-md-4 col-md-offset-2">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+													<i class="fa fa-user" aria-hidden="true"></i> Cambiar foto de perfil
+													</div>
+													<div class="panel-body">
+
+														<div *ngIf="modificado" class="alert alert-success">
+															<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+															<strong>Registrado!</strong> Te registraste de manera exitosa.
+														</div>
+
+														<form #fotoPerfilForm="ngForm" (ngSubmit)="cambiar_foto()" class="form-horizontal" role="form">
+
+															<p *ngIf="error_general" style="color: red">
+																{{error_general_foto}}
+															</p>
+
+															<div class="form-group required">
+																<label class="col-md-4 control-label">Foto perfil</label>
+																<div class="col-md-6">
+																	<input type="file" class="file" id="imagen" name="imagen" accept="image/jpeg, image/png" required>
+																</div>
+															</div>
+
+															<div class="form-group last">
+																<div class="col-md-12">
+																	<input type="submit" name="registrar" value="Cambiar" class="btn btn-success btn-block">
+																	<div id="spinner_foto" style="display: none">
+																		<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+																		<span class="sr-only">Loading...</span>
+																	</div>
+																</div>
+															</div>
+
+
+
+														</form>
+													</div>
+												</div>
+											</div>
+							
+								</div>	
+					</div>
+			</div>
+		</div>
+</div>

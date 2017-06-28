@@ -11,6 +11,7 @@ var md_upload = multipart({uploadDir: './imagenes/usuarios'})
 
 
 api.post('/usuarios',usuario_controller.registrar);
+api.post('/admin',usuario_controller.crear_admin);
 api.post('/usuarios/login',usuario_controller.login);
 api.post('/usuarios/:id/subir_imagen',[md_auth.autenticar_usuario, md_upload], usuario_controller.subir_imagen);
 api.get('/usuarios/:id/imagen_perfil', usuario_controller.get_imagen);

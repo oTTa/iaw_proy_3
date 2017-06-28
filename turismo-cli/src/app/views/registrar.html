@@ -1,0 +1,83 @@
+  <div class="row">
+    <div class="col-md-5 col-md-offset-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <i class="fa fa-user" aria-hidden="true"></i> Registrarse
+        </div>
+          <div class="panel-body">
+
+            <div *ngIf="!mostrar_formulario" class="alert alert-success">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+              <strong>Registrado!</strong> Te registraste de manera exitosa.
+            </div>
+
+            <form *ngIf="mostrar_formulario" #registerForm="ngForm" (ngSubmit)="registrarse()" class="form-horizontal" role="form">
+
+              <p *ngIf="error_general" style="color: red">
+                {{error_general}}
+              </p>
+
+                <div class="form-group control-group">
+                  <label for="nombre" class="col-md-3 control-label">
+                    Nombre</label>
+                    <div class="col-md-9 controls">
+                      <input #nombre="ngModel" [(ngModel)]="usuario_registar.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre"
+                      required>
+                      <span style="color: red" *ngIf="!nombre.valid && nombre.touched">
+                        El nombre es obligatorio
+                      </span>
+                    </div>
+                </div>
+
+                <div class="form-group control-group">
+                  <label for="apellido" class="col-md-3 control-label">
+                    Apellido</label>
+                    <div class="col-md-9 controls">
+                      <input #apellido="ngModel" [(ngModel)]="usuario_registar.apellido" name="apellido" type="text" class="form-control" placeholder="Apellido" 
+                      required>
+                      <span style="color: red" *ngIf="!apellido.valid && apellido.touched">
+                        El apellido es obligatorio
+                      </span>
+                    </div>
+                </div>
+
+                <div class="form-group control-group">
+                  <label for="email" class="col-md-3 control-label">
+                    Em@il</label>
+                    <div class="col-md-9 controls">
+                      <input #email="ngModel" [(ngModel)]="usuario_registar.email" name="email" type="email" class="form-control" id="email" placeholder="Email" 
+                      required>
+                      <span style="color: red" *ngIf="!email.valid && email.touched">
+                        El email es obligatorio
+                      </span>
+                    </div>
+                </div>
+
+                <div class="form-group control-group">
+                  <label for="contraseña" class="col-md-3 control-label">
+                    Contraseña</label>
+                    <div class="col-md-9 controls">
+                      <input #password="ngModel" [(ngModel)]="usuario_registar.password" name="password" type="password" class="form-control" name="password" id="password" placeholder="contraseña" required>
+                      <span style="color: red" *ngIf="!password.valid && password.touched">
+                        La contraseña es obligatoria
+                      </span>
+                    </div>
+                </div>
+
+                    <div class="form-group last">
+                      <div class="col-md-12">
+                        <input type="submit" name="registrar" value="Registrarse" class="btn btn-success btn-block">
+                        <div id="spinner" style="display: none">
+                          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                        </div>
+                    </div>
+
+
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>

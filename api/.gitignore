@@ -58,6 +58,11 @@ typings/
 .env
 
 #archivos subido por el usuario y el admin
-imagenes/usuarios/*
-imagenes/paquetes/*
-imagenes/paquetes/thumb/*
+imagenes/usuarios/*.jpg
+imagenes/usuarios/*.png
+
+imagenes/paquetes/*.png
+imagenes/paquetes/*.jpg
+
+imagenes/paquetes/thumb/*.png
+imagenes/paquetes/thumb/*.jpg

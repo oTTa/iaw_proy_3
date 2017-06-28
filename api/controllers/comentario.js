@@ -101,7 +101,7 @@ function listar (req, res){
 
 	var items_por_pag = 20;
 
-	Comentario.find().populate('usuario', 'nombre apellido imagen email').paginate(pag, items_por_pag, function(err, comentarios, total){
+	Comentario.find({paquete: req.params.id_paquete}).populate('usuario', 'nombre apellido imagen email').paginate(pag, items_por_pag, function(err, comentarios, total){
 		if (err){
 			return res.status(500).send({message : "error en la petición listar"});
 		}
@@ -113,7 +113,7 @@ function listar (req, res){
 			else{
 				var sig, ant;
 
-				if (pag == Math.ceil(total/items_por_pag))
+				if (pag == Math.ceil(total/items_por_pag) || 0 == Math.ceil(total/items_por_pag))
 					sig=null;
 				else
 					sig=parseInt(pag)+1;

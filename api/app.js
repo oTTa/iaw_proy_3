@@ -19,9 +19,9 @@ app.use(body_parser.json());
 
 app.use((req, res, next) =>{
 	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', '*');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-KEY, Origin, X-Requested-With, Accept, Access-Control-Allow-Request-Method');
 	res.header('Access-Control-Allow-Method', 'GET, POST, OPTIONS, PUT, DELETE');
-	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+	//res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
 
 	next();
 
