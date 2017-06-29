@@ -1,18 +1,32 @@
-#main_container{
+.main_container{
 	margin-top: 70px;
+	margin-bottom: 70px;
 	background-color: white;
 	border-radius: 10px;
+	padding: 15px;
 }
 
-#main_container_transparente{
+.main_container_transparente{
 	margin-top: 70px;
+	margin-bottom: 70px;
+
 }
 
-#titulo{
+.titulo{
 	text-align: center;
 }
-
+.busqueda{
+	padding: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	background-color: #cecece;
+}
 .center-image{
 	display: block;
     margin: 0 auto;
+}
+
+agm-map {
+  height: 300px;
 }

@@ -197,41 +197,75 @@ function listar(req, res){
 		return res.status(400).send({message : "la pagina debe ser mayor a 0"});
 	}
 
-	var items_por_pag = 2;
-
-	Destino.find().paginate(pag, items_por_pag, function(err, destinos, total){
-		if (err){
-			return res.status(500).send({message : "error en la petición"});
-		}
-		else
-		{
-			if(!destinos){
-				return res.status(404).send({message: 'No hay destinos'})
+	var items_por_pag = 10;
+	if (req.query.nombre)
+		Destino.find({"nombre": {$regex : ".*"+req.query.nombre+".*"}}).sort( { "nombre": 1 } ).paginate(pag, items_por_pag, function(err, destinos, total){
+			if (err){
+				return res.status(500).send({message : "error en la petición"});
 			}
-			else{
-				var sig, ant;
+			else
+			{
+				if(!destinos){
+					return res.status(404).send({message: 'No hay destinos'})
+				}
+				else{
+					var sig, ant;
 
-				if (pag == Math.ceil(total/items_por_pag))
-					sig=null;
-				else
-					sig=parseInt(pag)+1;
+					if (pag == Math.ceil(total/items_por_pag))
+						sig=null;
+					else
+						sig=parseInt(pag)+1;
 
-				if (pag==1)
-					ant=null;
-				else
-					ant=parseInt(pag)-1;
-				return res.status(200).send({
-					header: {
-						paginas: Math.ceil(total/items_por_pag),
-						total: total,
-						siguiente: sig,
-						anterior: ant
-					},					
-					destinos: destinos
-				});
+					if (pag==1)
+						ant=null;
+					else
+						ant=parseInt(pag)-1;
+					return res.status(200).send({
+						header: {
+							paginas: Math.ceil(total/items_por_pag),
+							total: total,
+							siguiente: sig,
+							anterior: ant
+						},					
+						destinos: destinos
+					});
+				}
 			}
-		}
-	});
+		});
+	else
+		Destino.find().sort( { "nombre": 1 } ).paginate(pag, items_por_pag, function(err, destinos, total){
+			if (err){
+				return res.status(500).send({message : "error en la petición"});
+			}
+			else
+			{
+				if(!destinos){
+					return res.status(404).send({message: 'No hay destinos'})
+				}
+				else{
+					var sig, ant;
+
+					if (pag == Math.ceil(total/items_por_pag))
+						sig=null;
+					else
+						sig=parseInt(pag)+1;
+
+					if (pag==1)
+						ant=null;
+					else
+						ant=parseInt(pag)-1;
+					return res.status(200).send({
+						header: {
+							paginas: Math.ceil(total/items_por_pag),
+							total: total,
+							siguiente: sig,
+							anterior: ant
+						},					
+						destinos: destinos
+					});
+				}
+			}
+		});
 }
 
 module.exports = {

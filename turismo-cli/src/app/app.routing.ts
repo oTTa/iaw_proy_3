@@ -10,7 +10,7 @@ import { DestinoComponent } from './components/destino.component';
 const appRoutes: Routes = [
 	{path:'registrarse', component: RegistrarComponent},
 	{path:'perfil', component: PerfilComponent},
-	{path:'destinos', component: PerfilComponent},
+	{path:'destinos', component: DestinoComponent},
 	{path:'**', component: InicioComponent},
 	{path:'', component: InicioComponent}
 
