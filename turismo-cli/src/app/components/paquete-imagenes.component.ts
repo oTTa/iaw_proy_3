@@ -24,7 +24,7 @@ export class PaqueteImagenesComponent implements OnInit{
   public modificado_imagen;
   public imagenes;
   public paquete;
-
+  
 
   constructor (
   	private _usuarioService: UsuarioService,

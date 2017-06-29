@@ -66,7 +66,7 @@ export class PaqueteComponent implements OnInit{
     this._paqueteService.get_paquetes(page,this.destino_paquetes._id).subscribe(
       response => {
         let paquetes = response.paquetes;
-        this.paquetes = paquetes;
+        
         console.log(paquetes);
         this.ant = response.header.anterior;
         this.sig = response.header.siguiente;
@@ -77,7 +77,7 @@ export class PaqueteComponent implements OnInit{
             paquetes[i].fecha_salida = paquetes[i].fecha_salida.substring(0,10);
             paquetes[i].fecha_regreso = paquetes[i].fecha_regreso.substring(0,10);
         }
-
+        this.paquetes = paquetes;
       },
       error => {
         var error_message = <any>error;
