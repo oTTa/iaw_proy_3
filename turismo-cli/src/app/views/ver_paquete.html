@@ -1,0 +1,64 @@
+<div class="main_container">
+	<h1 class="titulo">{{destino_paquetes.nombre}}, {{destino_paquetes.provincia}}, {{destino_paquetes.pais}}</h1>
+	<h3 class="titulo">Del {{paquete.fecha_salida}} al {{paquete.fecha_regreso}}</h3>
+	<div class="container">
+		<img style="max-width: 600px;" src="{{url}}/paquetes/{{paquete._id}}/imagenes/{{id_imagen}}" class="center-image img-responsive">
+		<button style="margin-top: 10px" type="button" class="center-image btn btn-success btn-sm" (click)="aumentar_loop1()">Siguiente</button>
+	</div>
+
+	<div class="row" style="padding: 25px;">
+		<h3 class="titulo">Descripción</h3>
+		<p>
+			{{paquete.descripcion}}
+		</p>
+	</div>
+	<div class="container" style="max-width: 600px;">
+	 <div id="map" style="margin: 10px 0px 10px 0px">
+	                        	<h3 class="titulo" style="margin-bottom: 10px; text-align: center;"><i class="fa fa-map-marker" aria-hidden="true"></i> Ubicación destino</h3>
+	                        	<agm-map 
+	                        	[latitude]="destino_paquetes.latitud" 
+	                        	[longitude]="destino_paquetes.longitud"
+	                        	(mapClick)="mapClicked($event)"
+	                        	>
+								  <agm-marker 
+								  [latitude]="destino_paquetes.latitud" 
+								  [longitude]="destino_paquetes.longitud"
+								  ></agm-marker>
+								</agm-map>
+	                        	<p id="error_mapa" style="color: red; display: none"></p>
+	</div>
+	</div>
+
+
+	<!--<div class="row" style="padding: 25px;">
+		<div id="video_moto" class="embed-responsive embed-responsive-4by3">
+            <iframe id="video" class="embed-responsive-item" src="{{get_video()}}"></iframe>
+        </div>	
+	</div>-->
+	
+	<div class="container" style="max-width: 600px; margin-top: 40px">
+
+		<div class="form-group control-group">
+			<form #destinoForm="ngForm" (ngSubmit)="comentar()" class="form-horizontal" role="form" novalidate>
+
+				<div class="col-md-9 controls">
+					<textarea #contenido="ngModel" [(ngModel)]="comentario.contenido" name="contenido" type="text" class="form-control" placeholder="Comentario" 
+					required></textarea>
+					<span style="color: red" *ngIf="!contenido.valid && contenido.touched">
+						El contenido del comentario es obligatorio
+					</span>
+				</div>
+				<br>
+				<div class="form-group last" style="margin-top: 15px">
+	                            <div class="col-md-9">
+	                                <input type="submit" class="btn btn-success btn-block" value="Comentar">
+	                            </div>
+	            </div>
+			</form>
+		</div>
+
+	</div>
+
+
+</div>
+

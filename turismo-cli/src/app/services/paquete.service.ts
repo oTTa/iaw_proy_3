@@ -63,6 +63,17 @@ export class PaqueteService {
 		.map(res => res.json());
 	}
 
+	comentar (id_paquete,comentario){
+		let params = JSON.stringify(comentario);
+
+		let headers = new Headers({
+			'Content-Type':'application/json',
+			'Authorization': localStorage.getItem('token')
+		});
+
+		return this._http.post(this.url+'paquetes/'+id_paquete+'/comentarios',params, {headers: headers})
+		.map(res => res.json());
+	}
 
 
 }
