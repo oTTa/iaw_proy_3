@@ -27,6 +27,7 @@ export class VerPaqueteComponent implements OnInit{
   public id_imagen;
   public comentario : Comentario;
   public comentario_publicado;
+  public comentarios;
 
 
   constructor (
@@ -44,6 +45,7 @@ export class VerPaqueteComponent implements OnInit{
     this.destino_paquetes = JSON.parse(localStorage.getItem('destino_ver'));
     this.paquete = JSON.parse(localStorage.getItem('paquete_ver'));
     this.obtener_imagenes(this.paquete._id);
+    this.obtener_comentarios();
     this.loop1=0;
     this.comentario = new Comentario(null,"","","");
     this.comentario_publicado=false;
@@ -76,11 +78,28 @@ export class VerPaqueteComponent implements OnInit{
     )
   }
 
+  private obtener_comentarios (){
+    this._paqueteService.get_comentarios(this.paquete._id).subscribe(
+      response => {
+        this.comentarios = response.comentarios;
+        console.log(this.comentarios);
+      },
+      error => {
+        var error_message = <any>error;
+        if (error_message != null){
+          var body = JSON.parse(error._body);
+          alert(body.message);
+        }
+      }
+    )
+  }
+
+
   comentar(){
       this._paqueteService.comentar(this.paquete._id,this.comentario).subscribe(
         response => {
-
           console.log(response.comentario);
+          this.obtener_comentarios();
         },
         error => {
           var error_message = <any>error;

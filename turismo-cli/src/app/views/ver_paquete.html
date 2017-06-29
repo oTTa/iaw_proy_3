@@ -35,6 +35,28 @@
             <iframe id="video" class="embed-responsive-item" src="{{get_video()}}"></iframe>
         </div>	
 	</div>-->
+	<div class="container">
+	<h2 class="titulo"> Comentarios</h2>
+	<table class="table table-striped">
+
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Comentario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let comentario of comentarios">
+
+      <tr>
+        <td>{{comentario.usuario.nombre}} {{comentario.usuario.apellido}}</td>
+        <td>{{comentario.contenido}}</td>
+      </tr>
+	</ng-container>
+
+    </tbody>
+  </table>
+  </div>
 	
 	<div class="container" style="max-width: 600px; margin-top: 40px">
 

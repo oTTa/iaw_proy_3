@@ -75,6 +75,11 @@ export class PaqueteService {
 		.map(res => res.json());
 	}
 
+	get_comentarios (id_paq){
+			return this._http.get(this.url+'paquetes/'+id_paq+'/comentarios')
+			.map(res => res.json());
+	}
+
 
 }
 
