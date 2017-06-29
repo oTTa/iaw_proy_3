@@ -17,7 +17,7 @@
 <!-- is admin -->
         <ul *ngIf="identity" class="nav navbar-nav">
 
-          <li class="nav-item">
+          <li *ngIf="identity.role==='ROLE_ADMIN'" class="nav-item">
              <a class="nav-link" href="/destinos">Destinos</a>
           </li>
 

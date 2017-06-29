@@ -49,6 +49,20 @@ export class PaqueteService {
 			.map(res => res.json());
 	}
 
+	get_imagenes (id_paq){
+			return this._http.get(this.url+'paquetes/'+id_paq+'/imagenes')
+			.map(res => res.json());
+	}
+
+	borrar_imagen (id_paquete, id_imagen){
+		let headers = new Headers({
+			'Authorization': localStorage.getItem('token')
+		});
+
+		return this._http.delete(this.url+'paquetes/'+id_paquete+'/imagenes/'+id_imagen, {headers: headers})
+		.map(res => res.json());
+	}
+
 
 
 }

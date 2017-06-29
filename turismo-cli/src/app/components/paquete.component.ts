@@ -5,12 +5,12 @@ import  {GLOBAL} from '../services/global';
 import { Paquete } from '../models/paquete';
 import { Destino } from '../models/destino';
 import { AgmCoreModule } from '@agm/core';
-
+import { Router, ActivatedRoute } from '@angular/router';
 import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 
 
 @Component({
-  selector: 'app-inicio',
+  selector: 'app-paquete',
   templateUrl: '../views/paquetes.html',
   styleUrls: ['../../assets/css/template/template.css','../../assets/css/template/formulario.css'],
   providers: [UsuarioService, PaqueteService]
@@ -46,6 +46,8 @@ export class PaqueteComponent implements OnInit{
   constructor (
   	private _usuarioService: UsuarioService,
     private _paqueteService: PaqueteService,
+    private route: ActivatedRoute,
+    private router: Router
   ){
     this.url = GLOBAL.url;
     this.paquete = new Paquete("","",null,"","","");
@@ -235,7 +237,10 @@ export class PaqueteComponent implements OnInit{
     this.fecha_regreso_aux = event.date.year+"-"+mes+"-"+dia;
   }
 
-
+  ver_imagenes(paq){
+    localStorage.setItem('paquete',JSON.stringify(paq));
+    this.router.navigateByUrl('paquetes/imagenes')
+  }
 
 }
 

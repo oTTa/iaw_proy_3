@@ -15,6 +15,7 @@ import { PerfilComponent } from './components/perfil.component';
 import { InicioComponent } from './components/inicio.component';
 import { DestinoComponent } from './components/destino.component';
 import { PaqueteComponent } from './components/paquete.component';
+import { PaqueteImagenesComponent } from './components/paquete-imagenes.component';
 import { MyDatePickerModule } from 'mydatepicker';
 
 
@@ -26,7 +27,8 @@ import { MyDatePickerModule } from 'mydatepicker';
     PerfilComponent,
     InicioComponent,
     DestinoComponent,
-    PaqueteComponent
+    PaqueteComponent,
+    PaqueteImagenesComponent
 
   ],
   imports: [

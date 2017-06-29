@@ -7,12 +7,14 @@ import { PerfilComponent } from './components/perfil.component';
 import { InicioComponent } from './components/inicio.component';
 import { DestinoComponent } from './components/destino.component';
 import { PaqueteComponent } from './components/paquete.component';
+import { PaqueteImagenesComponent } from './components/paquete-imagenes.component';
 
 const appRoutes: Routes = [
 	{path:'registrarse', component: RegistrarComponent},
 	{path:'perfil', component: PerfilComponent},
 	{path:'destinos', component: DestinoComponent},
 	{path:'paquetes', component: PaqueteComponent},
+	{path:'paquetes/imagenes', component: PaqueteImagenesComponent},
 	{path:'**', component: InicioComponent},
 	{path:'', component: InicioComponent}
 

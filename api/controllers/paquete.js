@@ -514,6 +514,26 @@ function subir_imagen (req, res){
 	}
 }
 
+function borrar_imagen(req, res){
+	Imagen_paquete.remove({_id: req.params.id_imagen}, (err, paquete) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!paquete){
+				res.status('404').send({
+					message : 'No existe la imagen.'
+				});
+			}
+			else{
+				res.status('204').send({});
+			}
+		}
+	});
+}
+
 function borrar(req, res){
 	Paquete.remove({_id: req.params.id}, (err, paquete) => {
 		if (err){
@@ -544,5 +564,6 @@ module.exports = {
 	get_imagen,
 	get_imagen_thumb,
 	listar_paquetes_destino,
-	borrar
+	borrar,
+	borrar_imagen
 };
