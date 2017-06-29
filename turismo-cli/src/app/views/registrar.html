@@ -21,7 +21,7 @@
                   <label for="nombre" class="col-md-3 control-label">
                     Nombre</label>
                     <div class="col-md-9 controls">
-                      <input #nombre="ngModel" [(ngModel)]="destino.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre"
+                      <input #nombre="ngModel" [(ngModel)]="usuario_registar.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre"
                       required>
                       <span style="color: red" *ngIf="!nombre.valid && nombre.touched">
                         El nombre es obligatorio
@@ -31,12 +31,12 @@
 
                 <div class="form-group control-group">
                   <label for="apellido" class="col-md-3 control-label">
-                    Provincia</label>
+                    Apellido</label>
                     <div class="col-md-9 controls">
-                      <input #nombre="ngModel" [(ngModel)]="destino.provincia" name="provincia" type="text" class="form-control" placeholder="Provincia" 
+                      <input #apellido="ngModel" [(ngModel)]="usuario_registar.apellido" name="apellido" type="text" class="form-control" placeholder="Provincia" 
                       required>
-                      <span style="color: red" *ngIf="!provincia.valid && provincia.touched">
-                        La provincia es obligatorio
+                      <span style="color: red" *ngIf="!apellido.valid && apellido.touched">
+                        El apellido es obligatorio
                       </span>
                     </div>
                 </div>

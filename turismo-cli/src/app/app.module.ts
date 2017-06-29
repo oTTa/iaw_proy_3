@@ -14,7 +14,8 @@ import { RegistrarComponent } from './components/usuario-registrar.component';
 import { PerfilComponent } from './components/perfil.component';
 import { InicioComponent } from './components/inicio.component';
 import { DestinoComponent } from './components/destino.component';
-
+import { PaqueteComponent } from './components/paquete.component';
+import { MyDatePickerModule } from 'mydatepicker';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { DestinoComponent } from './components/destino.component';
     PerfilComponent,
     InicioComponent,
     DestinoComponent,
+    PaqueteComponent
 
   ],
   imports: [
@@ -32,6 +34,7 @@ import { DestinoComponent } from './components/destino.component';
     FormsModule,
     HttpModule,
     routing,
+    MyDatePickerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBhRS7SnEA8mE-K-viYjtKaj659G9hqSJA'
     })

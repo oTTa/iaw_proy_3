@@ -199,7 +199,7 @@ function listar(req, res){
 
 	var items_por_pag = 10;
 	if (req.query.nombre)
-		Destino.find({"nombre": {$regex : ".*"+req.query.nombre+".*"}}).sort( { "nombre": 1 } ).paginate(pag, items_por_pag, function(err, destinos, total){
+		Destino.find({$or: [ {"nombre": {$regex : ".*"+req.query.nombre+".*"}}, {"pais": {$regex : ".*"+req.query.nombre+".*"}}, {"provincia": {$regex : ".*"+req.query.nombre+".*"}}] }).sort( { "nombre": 1 } ).paginate(pag, items_por_pag, function(err, destinos, total){
 			if (err){
 				return res.status(500).send({message : "error en la petición"});
 			}

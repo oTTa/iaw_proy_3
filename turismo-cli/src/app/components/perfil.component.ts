@@ -71,7 +71,6 @@ export class PerfilComponent implements OnInit{
     this.filesToUpload = fileInput.target.files;
     this.error_general_foto=false;
     this.error_foto = '';
-    console.log(this.filesToUpload);
   }
 
   make_file_request(url: string, params: Array<string>, files: Array<File>){

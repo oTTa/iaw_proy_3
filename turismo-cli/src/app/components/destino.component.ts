@@ -4,12 +4,12 @@ import { DestinoService } from '../services/destino.service';
 import  {GLOBAL} from '../services/global';
 import { Destino } from '../models/destino';
 import { AgmCoreModule } from '@agm/core';
-
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
   selector: 'app-inicio',
-  templateUrl: '../views/destino/destinos.html',
+  templateUrl: '../views/destinos.html',
   styleUrls: ['../../assets/css/template/template.css','../../assets/css/template/formulario.css'],
   providers: [UsuarioService, DestinoService]
 })
@@ -31,9 +31,12 @@ export class DestinoComponent implements OnInit{
   public info;
   public editar=false;
 
+
   constructor (
   	private _usuarioService: UsuarioService,
     private _destinoService: DestinoService,
+    private route: ActivatedRoute,
+    private router: Router
   ){
     this.url = GLOBAL.url;
     this.destino = new Destino("","","","",this.lat,this.lng);
@@ -91,6 +94,8 @@ export class DestinoComponent implements OnInit{
    mapClicked($event: any) {
       this.lat = parseFloat($event.coords.lat);
       this.lng = parseFloat($event.coords.lng);
+      console.log(this.lat);
+      console.log(this.lng);
    }
 
    crear_destino(){
@@ -121,6 +126,10 @@ export class DestinoComponent implements OnInit{
 
   editar_destino(){
     this.error_general=null;
+    this.destino_editar.latitud = this.lat;
+    this.destino_editar.longitud = this.lng;
+    console.log(this.lat);
+    console.log(this.lng);
     this._destinoService.editar_destino(this.destino_editar).subscribe(
       response => {
         let destino = response.destino;
@@ -152,7 +161,12 @@ export class DestinoComponent implements OnInit{
   }
 
   preparar_editar(dest){
-    this.destino_editar = new Destino(dest._id,dest.nombre,dest.provincia,dest.pais,this.lat,this.lng);
+    this.destino_editar.nombre = dest.nombre;
+    this.destino_editar.provincia = dest.provincia;
+    this.destino_editar.pais = dest.pais;
+    this.destino_editar._id = dest._id;
+    this.lat = dest.latitud;
+    this.lng = dest.longitud;
     this.editar=true;
   }
 
@@ -186,6 +200,11 @@ export class DestinoComponent implements OnInit{
       }
     );
 
+  }
+
+  ver_paquetes(dest){
+    localStorage.setItem('destino',JSON.stringify(dest));
+    this.router.navigateByUrl('paquetes')
   }
 
 

@@ -299,6 +299,58 @@ function listar(req, res){
 
 }
 
+function listar_paquetes_destino(req, res){
+	var pag
+	if (req.query.page)
+		pag = req.query.page;
+	else
+		pag = 1;
+
+	if (pag<1)
+	{
+		return res.status(400).send({message : "la pagina debe ser mayor a 0"});
+	}
+
+	var id_destino = req.params.id_destino;
+
+	var items_por_pag = 20;
+
+	Paquete.find({"destino": id_destino}).populate('destino').paginate(pag, items_por_pag, function(err, paquetes, total){
+		if (err){
+			return res.status(500).send({message : "error en la petición listar"});
+		}
+		else
+		{
+			if(!paquetes){
+				return res.status(404).send({message: 'No hay paquetes'})
+			}
+			else{
+				var sig, ant;
+
+				if (pag == Math.ceil(total/items_por_pag))
+					sig=null;
+				else
+					sig=parseInt(pag)+1;
+
+				if (pag==1)
+					ant=null;
+				else
+					ant=parseInt(pag)-1;
+				return res.status(200).send({
+					header: {
+						paginas: Math.ceil(total/items_por_pag),
+						total: total,
+						siguiente: sig,
+						anterior: ant
+					},					
+					paquetes: paquetes
+				});
+			}
+		}
+	});
+
+}
+
 function editar(req, res){
 	var id_paquete = req.params.id;
 	var update = req.body;
@@ -462,6 +514,26 @@ function subir_imagen (req, res){
 	}
 }
 
+function borrar(req, res){
+	Paquete.remove({_id: req.params.id}, (err, paquete) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!paquete){
+				res.status('404').send({
+					message : 'No existe el paquete.'
+				});
+			}
+			else{
+				res.status('204').send({});
+			}
+		}
+	});
+}
+
 module.exports = {
 	crear,
 	editar,
@@ -470,5 +542,7 @@ module.exports = {
 	subir_imagen,
 	get_imagenes,
 	get_imagen,
-	get_imagen_thumb
+	get_imagen_thumb,
+	listar_paquetes_destino,
+	borrar
 };

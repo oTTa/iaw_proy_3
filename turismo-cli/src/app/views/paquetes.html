@@ -1,0 +1,135 @@
+<div class="row" *ngIf="!editar">
+	        <div class="col-md-5 col-md-offset-4">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                    <i class="fa fa-plan" aria-hidden="true"></i> Añadir Paquete</div>
+	                <div class="panel-body">
+	                    <form #destinoForm="ngForm" (ngSubmit)="crear_paquete()" class="form-horizontal" role="form" novalidate>
+							<p *ngIf="error_general" style="color: red">
+			                {{error_general}}
+			              </p>
+
+			              <div *ngIf="paquete_creado" class="alert alert-success">
+				              <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+				              <strong>Exito! </strong>{{paquete_creado}}
+				          </div>
+
+			              <div class="form-group control-group">
+			                  <label for="fecha_salida" class="col-md-3 control-label">
+			                    Fecha de salida</label>
+			                    <div class="col-md-9 controls">
+									 <my-date-picker  [options]="myDatePickerOptions" #fecha_salida="ngModel" [(ngModel)]="paquete.fecha_salida" id="fecha_salida" name="fecha_salida" (dateChanged)="onDateChanged_salida($event)" required></my-date-picker>
+									 <span style="color: red" *ngIf="!fecha_salida.valid && fecha_salida.touched">
+			                        	La fecha de salida es obligatoria
+			                      </span>
+			                    </div>
+			                </div>
+			               
+
+			                <div class="form-group control-group">
+			                  <label for="fecha_regreso" class="col-md-3 control-label">
+			                    Fecha de regreso</label>
+			                    <div class="col-md-9 controls">
+			                      <my-date-picker [options]="myDatePickerOptions" #fecha_regreso="ngModel" [(ngModel)]="paquete.fecha_regreso" id="fecha_regreso" name="fecha_regreso" (dateChanged)="onDateChanged_regreso($event)" required></my-date-picker>
+									 <span style="color: red" *ngIf="!fecha_regreso.valid && fecha_regreso.touched">
+			                        	La fecha de regreso es obligatoria
+			                      </span>
+			                    </div>
+			                </div>
+
+			                <div class="form-group control-group">
+			                  <label for="descripcion" class="col-md-3 control-label">
+			                    Descripcion</label>
+			                    <div class="col-md-9 controls">
+			                      <textarea #descripcion="ngModel" [(ngModel)]="paquete.descripcion" id="descripcion" name="descripcion" type="text" class="form-control" placeholder="Descripcion" 
+			                      required></textarea>
+			                      <span style="color: red" *ngIf="!descripcion.valid && descripcion.touched">
+			                        La descripcion es obligatoria
+			                      </span>
+			                    </div>
+			                </div>
+
+			                <div class="form-group control-group">
+			                  <label for="costo" class="col-md-3 control-label">
+			                    Costo</label>
+			                    <div class="col-md-9 controls">
+			                      <input #costo="ngModel" [(ngModel)]="paquete.costo" id="costo" name="costo" type="text" class="form-control" placeholder="Costo" 
+			                      required>
+			                      <span style="color: red" *ngIf="!costo.valid && costo.touched">
+			                        El costo es obligatorio
+			                      </span>
+			                    </div>
+			                </div>
+
+			                <div class="form-group control-group">
+			                  <label for="costo" class="col-md-3 control-label">
+			                    Url video</label>
+			                    <div class="col-md-9 controls">
+			                      <input #url_video="ngModel" [(ngModel)]="paquete.url_video" id="url_video" name="url_video" type="text" class="form-control" placeholder="Url video" 
+			                      required>
+			                      <span style="color: red" *ngIf="!url_video.valid && url_video.touched">
+			                        La url del video es obligatoria
+			                      </span>
+			                    </div>
+			                </div>
+
+
+
+					
+
+	                        <div class="form-group last">
+	                            <div class="col-md-12">
+	                                <input type="submit" class="btn btn-success btn-block" value="Añadir paquete">
+	                            </div>
+	                        </div>
+                       
+
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+</div>
+
+<div class="row main_container">
+	
+	<h2 class="titulo">{{destino_paquetes.nombre}}, {{destino_paquetes.provincia}}, {{destino_paquetes.pais}}</h2>
+	
+
+	<table class="table table-striped">
+
+    <thead>
+      <tr>
+        <th>Fecha de salida</th>
+        <th>Fecha de ralida</th>
+        <th>Costo</th>
+        <th>Url video</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let paq of paquetes">
+
+      <tr>
+        <td>{{paq.fecha_salida}}</td>
+        <td>{{paq.fecha_regreso}}</td>
+        <td>{{paq.costo}}</td>
+        <td><a target='_blank' href='"{{paq.url_video}}"'>Ver video <i class='fa fa-youtube-play' aria-hidden='true'></i></a></td>
+        <td>
+        	<!--<button type="button" class="btn btn-primary btn-sm" (click)="preparar_editar(paq)">Editar</button>-->
+        	<button type="button" class="btn btn-success btn-sm" (click)="preparar_editar(paq)">Imagenes</button>
+        	<button type="button" class="btn btn-danger btn-sm" (click)="borrar_paquete(paq)">Borrar</button>
+        </td>
+      </tr>
+	</ng-container>
+
+    </tbody>
+  </table>
+  <p *ngIf="info" style="color: red" >
+				{{info}}	                  
+  </p>
+  <ul class="pager">
+  	<li *ngIf="ant" class="previous" style="cursor:pointer" (click)="pagina_anterior()"><a >Anterios</a></li>
+  	<li *ngIf="sig" class="next" style="cursor:pointer" (click)="pagina_siguiente()" ><a>Siguiente</a></li>
+  </ul>
+</div>
+
