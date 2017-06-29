@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!editar">
 	        <div class="col-md-5 col-md-offset-4">
 	            <div class="panel panel-default">
 	                <div class="panel-heading">
@@ -82,6 +82,88 @@
 	        </div>
 </div>
 
+<div *ngIf="editar" class="row">
+	        <div class="col-md-5 col-md-offset-4">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                    <i class="fa fa-map-marker" aria-hidden="true"></i> Editar Destino</div>
+	                <div class="panel-body">
+	                    <form #destinoForm="ngForm" (ngSubmit)="editar_destino()" class="form-horizontal" role="form" novalidate>
+							<p *ngIf="error_general" style="color: red">
+			                {{error_general}}
+			              </p>
+
+
+			              <div class="form-group control-group">
+			                  <label for="nombre" class="col-md-3 control-label">
+			                    Nombre</label>
+			                    <div class="col-md-9 controls">
+			                      <input #nombreEditar="ngModel" [(ngModel)]="destino_editar.nombre" name="nombreEditar" type="text" class="form-control" placeholder="Nombre" 
+			                      required>
+			                      <span style="color: red" *ngIf="!nombreEditar.valid && nombreEditar.touched">
+			                        El nombre es obligatorio
+			                      </span>
+			                    </div>
+			                </div>
+
+	                       <div class="form-group control-group">
+			                  <label for="provincia" class="col-md-3 control-label">
+			                    Provincia</label>
+			                    <div class="col-md-9 controls">
+			                      <input #provinciaEditar="ngModel" [(ngModel)]="destino_editar.provincia" name="provinciaEditar" type="text" class="form-control" placeholder="Provincia" 
+			                      required>
+			                      <span style="color: red" *ngIf="!provinciaEditar.valid && provinciaEditar.touched">
+			                        La provincia es obligatoria
+			                      </span>
+			                    </div>
+			                </div>
+
+			                <div class="form-group control-group">
+			                  <label for="provincia" class="col-md-3 control-label">
+			                    Pais</label>
+			                    <div class="col-md-9 controls">
+			                      <input #paisEditar="ngModel" [(ngModel)]="destino_editar.pais" name="paisEditar" type="text" class="form-control" placeholder="Pais" 
+			                      required>
+			                      <span style="color: red" *ngIf="!paisEditar.valid && paisEditar.touched">
+			                        El pais es obligatorio
+			                      </span>
+			                    </div>
+			                </div>
+	
+
+
+	                        <div id="map" style="margin: 10px 0px 10px 0px">
+	                        	<h3 class="titulo" style="margin-bottom: 10px; text-align: center;"><i class="fa fa-map-marker" aria-hidden="true"></i> Marcar destino</h3>
+	                        	<agm-map 
+	                        	[latitude]="lat" 
+	                        	[longitude]="lng"
+	                        	[zoom]=12
+	                        	(mapClick)="mapClicked($event)"
+	                        	>
+								  <agm-marker 
+								  [latitude]="lat" 
+								  [longitude]="lng"
+								  ></agm-marker>
+								</agm-map>
+	                        	<p id="error_mapa" style="color: red; display: none"></p>
+	                        </div>
+							
+							
+
+	                        <div class="form-group last">
+	                            <div class="col-md-12">
+	                                <input type="submit" class="btn btn-success btn-block" value="Editar destino">
+	                                <button type="button" class="btn btn-danger btn-block" (click)="quitar_editar()">Cancelar edición</button>
+	                            </div>
+	                        </div>
+                       
+
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+</div>
+
 <div class="row main_container">
 	
 	<h1 class="titulo">Destinos</h1>
@@ -89,9 +171,7 @@
 	 <form #destinoForm="ngForm" (ngSubmit)="buscar_destino()" class="col-md-4 col-md-offset-4 form-horizontal busqueda" role="form" novalidate>
 
 			 <div class="form-group control-group">
-					                  <label for="nombre" class="col-md-3 control-label">
-					                    Nombre</label>
-					                    <div class="col-md-9 controls">
+					                    <div class="col-md-12 controls">
 					                      <input #nombre="ngModel" [(ngModel)]="busqueda.nombre" name="nombre" type="text" class="form-control" placeholder="Nombre" 
 					                      required>
 					                      <span style="color: red" *ngIf="!nombre.valid && nombre.touched">
@@ -107,8 +187,9 @@
 			</div>
               
 	</form>
-
+	
 	<table class="table table-striped">
+
     <thead>
       <tr>
         <th>Nombre</th>
@@ -124,12 +205,19 @@
         <td>{{dest.nombre}}</td>
         <td>{{dest.provincia}}</td>
         <td>{{dest.pais}}</td>
-        <td></td>
+        <td>
+        	<button type="button" class="btn btn-primary btn-sm" (click)="preparar_editar(dest)">Editar</button>
+        	<button type="button" class="btn btn-success btn-sm" (click)="preparar_editar(dest)">Paquetes</button>
+        	<button type="button" class="btn btn-danger btn-sm" (click)="borrar_destino(dest)">Borrar</button>
+        </td>
       </tr>
 	</ng-container>
 
     </tbody>
   </table>
+  <p *ngIf="info" style="color: red" >
+				{{info}}	                  
+  </p>
   <ul class="pager">
   	<li *ngIf="ant" class="previous" style="cursor:pointer" (click)="pagina_anterior()"><a >Anterios</a></li>
   	<li *ngIf="sig" class="next" style="cursor:pointer" (click)="pagina_siguiente()" ><a>Siguiente</a></li>

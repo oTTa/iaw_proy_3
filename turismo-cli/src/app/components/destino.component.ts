@@ -21,20 +21,24 @@ export class DestinoComponent implements OnInit{
   public lat: number = -38.8009237;
   public lng: number = -62.343585;
   public destino : Destino;
+  public destino_editar : Destino;
   public busqueda : Destino;
   public error_general=null;
   public destino_creado=null;
   public destinos: Array<Destino>;
   public ant;
   public sig;
+  public info;
+  public editar=false;
 
   constructor (
   	private _usuarioService: UsuarioService,
     private _destinoService: DestinoService,
   ){
     this.url = GLOBAL.url;
-    this.destino = new Destino("","","",this.lat,this.lng);
-    this.busqueda = new Destino("","","",0,0);
+    this.destino = new Destino("","","","",this.lat,this.lng);
+    this.destino_editar = new Destino("","","","",this.lat,this.lng);
+    this.busqueda = new Destino("","","","",0,0);
   }
 
   ngOnInit(){
@@ -52,8 +56,14 @@ export class DestinoComponent implements OnInit{
         this.ant = response.header.anterior;
         this.sig = response.header.siguiente;
 
+        for (var i = 0; i < destinos.length; i++) {
+            destinos[i].nombre = destinos[i].nombre.replace(/\b./g, function(m){ return m.toUpperCase(); })
+            destinos[i].provincia = destinos[i].provincia.replace(/\b./g, function(m){ return m.toUpperCase(); })
+            destinos[i].pais = destinos[i].pais.replace(/\b./g, function(m){ return m.toUpperCase(); })
+        }
+
         if (destinos.length==0){
-          alert('No hay destinos en el sistema');
+          this.info='No se encontraron destinos.';
         }
       },
       error => {
@@ -92,7 +102,7 @@ export class DestinoComponent implements OnInit{
         this.destino = destino;
 
         if (!destino._id){
-          alert('error al registrarse');
+          alert('error al crear destino');
         }
         else{
           this.destino_creado = 'Destino ' + destino.nombre + ' creado correctamente.';
@@ -107,6 +117,75 @@ export class DestinoComponent implements OnInit{
         }
       }
     );
+  }
+
+  editar_destino(){
+    this.error_general=null;
+    this._destinoService.editar_destino(this.destino_editar).subscribe(
+      response => {
+        let destino = response.destino;
+        this.destino = destino;
+
+        if (!destino._id){
+          alert('error al editar destino');
+        }
+        else{
+          this.info = 'Destino ' + destino.nombre + ' editado correctamente.';
+          let actual;
+          if (this.ant==null)
+            actual = this.sig-1;
+          else if (this.sig==null)
+              actual = this.ant+1;
+          this.editar=false;
+          this.destino = new Destino("","","","",this.lat,this.lng);
+          this.obtener_destinos(1);
+        }
+      },
+      error => {
+        var error_message = <any>error;
+        if (error_message != null){
+          var body = JSON.parse(error._body);
+          this.error_general = body.message;
+        }
+      }
+    );
+  }
+
+  preparar_editar(dest){
+    this.destino_editar = new Destino(dest._id,dest.nombre,dest.provincia,dest.pais,this.lat,this.lng);
+    this.editar=true;
+  }
+
+  quitar_editar(){
+    this.editar=false;
+    this.error_general=null;
+  }
+
+  borrar_destino(dest){
+    let actual;
+    if (this.ant==null)
+      actual = this.sig-1;
+    else if (this.sig==null)
+        actual = this.ant+1;
+
+    if (this.sig==null && this.ant==null)
+      actual=1
+
+    this._destinoService.borrar_destino(dest._id).subscribe(
+      response => {
+
+          this.info='Destino '+dest.nombre+' borrado correctametne.';
+          this.obtener_destinos(actual);
+      },
+      error => {
+        var error_message = <any>error;
+        if (error_message != null){
+          var body = JSON.parse(error._body);
+           this.info = body.message;
+        }
+      }
+    );
+
   }
 
 

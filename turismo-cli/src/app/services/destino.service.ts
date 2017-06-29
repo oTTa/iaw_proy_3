@@ -13,7 +13,6 @@ export class DestinoService {
 
 	crear_destino (destino_nuevo){
 		let params = JSON.stringify(destino_nuevo);
-		let identity = JSON.parse(localStorage.getItem('identity'));
 
 		let headers = new Headers({
 			'Content-Type':'application/json',
@@ -21,6 +20,27 @@ export class DestinoService {
 	});
 
 		return this._http.post(this.url+'destinos',params, {headers: headers})
+		.map(res => res.json());
+	}
+
+	editar_destino (destino_editar){
+		let params = JSON.stringify(destino_editar);
+
+		let headers = new Headers({
+			'Content-Type':'application/json',
+			'Authorization': localStorage.getItem('token')
+	});
+
+		return this._http.put(this.url+'destinos/'+destino_editar._id,params, {headers: headers})
+		.map(res => res.json());
+	}
+
+	borrar_destino (id){
+		let headers = new Headers({
+			'Authorization': localStorage.getItem('token')
+		});
+
+		return this._http.delete(this.url+'destinos/'+id, {headers: headers})
 		.map(res => res.json());
 	}
 

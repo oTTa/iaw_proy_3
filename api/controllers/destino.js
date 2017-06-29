@@ -121,7 +121,7 @@ function editar(req, res){
 				return res.status(404).send({message:'No se pudo actualizar el destino.'});
 			}
 			else{
-				return res.status(200).send({usuario: destino_updated});
+				return res.status(200).send({destino: destino_updated});
 			}
 		}
 	});
@@ -268,9 +268,30 @@ function listar(req, res){
 		});
 }
 
+function borrar(req, res){
+	Destino.remove({_id: req.params.id}, (err, destino) => {
+		if (err){
+			res.status('500').send({
+				message : 'Error en la petición.'
+			});
+		}
+		else{
+			if (!destino){
+				res.status('404').send({
+					message : 'No existe el destino.'
+				});
+			}
+			else{
+				res.status('204').send({});
+			}
+		}
+	});
+}
+
 module.exports = {
 	crear,
 	get,
 	editar, 
-	listar
+	listar,
+	borrar
 };
